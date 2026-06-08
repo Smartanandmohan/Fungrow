@@ -93,12 +93,14 @@ function App() {
   // Auth callbacks
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
+    setViewMode('teen');
     setCurrentPage('browse');
     setNotificationsCount(prev => prev > 0 ? prev - 1 : 0);
   };
 
   const handleSignUpSuccess = () => {
     setIsLoggedIn(true);
+    setViewMode('teen');
     setCurrentPage('profile');
     alert("Welcome to Funngro! Fill in your basic information and profile to get started.");
   };
@@ -347,35 +349,38 @@ function App() {
     );
   }
 
+  // Symmetrical layout rendering
+  if (!isLoggedIn) {
+    return (
+      <div className="min-h-screen bg-white text-slate-900 overflow-x-hidden font-sans">
+        <TeenHome 
+          onLogin={() => setIsLoginModalOpen(true)}
+          onSignUp={handleSignUpSuccess} // Direct signup to profile setup
+          onExploreProjects={handleExploreProjects}
+          onSwitchToCompany={() => setViewMode('company')}
+        />
+        <LoginModal 
+          isOpen={isLoginModalOpen} 
+          onClose={() => setIsLoginModalOpen(false)}
+          onSuccess={handleLoginSuccess}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'dark bg-slate-950' : 'bg-white'}`}>
-      {!isLoggedIn ? (
-        <>
-          <TeenHome 
-            onLogin={() => setIsLoginModalOpen(true)}
-            onSignUp={handleSignUpSuccess} // Direct signup to profile setup
-            onExploreProjects={handleExploreProjects}
-            onSwitchToCompany={() => setViewMode('company')}
-          />
-          <LoginModal 
-            isOpen={isLoginModalOpen} 
-            onClose={() => setIsLoginModalOpen(false)}
-            onSuccess={handleLoginSuccess}
-          />
-        </>
-      ) : (
-        <DashboardLayout
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          userProfile={userProfile}
-          theme={theme}
-          toggleTheme={() => setTheme(prev => prev === 'light' ? 'dark' : 'light')}
-          onLogout={handleLogout}
-          notificationsCount={notificationsCount}
-        >
-          {renderDashboardPage()}
-        </DashboardLayout>
-      )}
+      <DashboardLayout
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        userProfile={userProfile}
+        theme={theme}
+        toggleTheme={() => setTheme(prev => prev === 'light' ? 'dark' : 'light')}
+        onLogout={handleLogout}
+        notificationsCount={notificationsCount}
+      >
+        {renderDashboardPage()}
+      </DashboardLayout>
     </div>
   );
 }
