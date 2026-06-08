@@ -4,15 +4,20 @@ import Modal from "./Modal";
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
-function LoginModal({ isOpen, onClose }: LoginModalProps) {
+function LoginModal({ isOpen, onClose, onSuccess }: LoginModalProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Login successful!");
+    if (onSuccess) {
+      onSuccess();
+    } else {
+      alert("Login successful!");
+    }
     onClose();
   };
 
@@ -21,7 +26,7 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Email */}
         <div>
-          <label htmlFor="login-email" className="text-sm font-medium text-slate-700 mb-1.5 block">
+          <label htmlFor="login-email" className="text-sm font-medium text-slate-700 dark:text-slate-350 mb-1.5 block">
             Email
           </label>
           <input
@@ -37,7 +42,7 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
         {/* Password */}
         <div>
-          <label htmlFor="login-password" className="text-sm font-medium text-slate-700 mb-1.5 block">
+          <label htmlFor="login-password" className="text-sm font-medium text-slate-700 dark:text-slate-355 mb-1.5 block">
             Password
           </label>
           <input
@@ -47,7 +52,7 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition-all text-sm"
+            className="w-full px-4 py-3 rounded-xl border border-slate-202 dark:border-slate-800 focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition-all text-sm bg-transparent dark:text-white"
           />
         </div>
 
@@ -56,9 +61,9 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
-              className="h-4 w-4 rounded border-slate-300 text-brand focus:ring-brand/20"
+              className="h-4 w-4 rounded border-slate-300 text-brand focus:ring-brand/20 accent-brand cursor-pointer"
             />
-            <span className="text-sm text-slate-600">Remember me</span>
+            <span className="text-sm text-slate-600 dark:text-slate-400">Remember me</span>
           </label>
           <a
             href="#"
@@ -71,22 +76,22 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
         {/* Submit button */}
         <button
           type="submit"
-          className="w-full bg-brand text-white py-3 rounded-full font-medium text-sm hover:bg-brand-dark transition-colors"
+          className="w-full bg-brand text-white py-3 rounded-full font-medium text-sm hover:bg-brand-dark transition-colors cursor-pointer"
         >
           Log In
         </button>
 
         {/* Divider */}
         <div className="flex items-center gap-3">
-          <div className="h-px flex-1 bg-slate-200" />
+          <div className="h-px flex-1 bg-slate-205 dark:bg-slate-800" />
           <span className="text-sm text-slate-400">or</span>
-          <div className="h-px flex-1 bg-slate-200" />
+          <div className="h-px flex-1 bg-slate-205 dark:bg-slate-800" />
         </div>
 
         {/* Sign up as Company */}
         <a
           href="#"
-          className="block w-full text-center py-3 rounded-full border border-slate-200 text-sm font-medium text-slate-700 hover:border-brand hover:text-brand transition-colors"
+          className="block w-full text-center py-3 rounded-full border border-slate-200 dark:border-slate-800 text-sm font-medium text-slate-700 dark:text-slate-300 hover:border-brand hover:text-brand dark:hover:border-brand transition-colors"
         >
           Sign up as a Company
         </a>
