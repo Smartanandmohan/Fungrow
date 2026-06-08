@@ -26,6 +26,7 @@ interface TeenHomeProps {
   onLogin: () => void;
   onSignUp: () => void;
   onExploreProjects: (category?: string) => void;
+  onSwitchToCompany?: () => void;
 }
 
 const testimonials = [
@@ -58,7 +59,7 @@ const testimonials = [
   }
 ];
 
-export default function TeenHome({ onLogin, onSignUp, onExploreProjects }: TeenHomeProps) {
+export default function TeenHome({ onLogin, onSignUp, onExploreProjects, onSwitchToCompany }: TeenHomeProps) {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   const nextTestimonial = () => {
@@ -100,6 +101,11 @@ export default function TeenHome({ onLogin, onSignUp, onExploreProjects }: TeenH
           </div>
           
           <nav className="hidden md:flex items-center gap-8 font-medium text-sm text-slate-600 dark:text-slate-300">
+            {onSwitchToCompany && (
+              <button onClick={onSwitchToCompany} className="hover:text-brand transition-colors cursor-pointer font-bold text-brand dark:text-brand-light">
+                Hire Teens
+              </button>
+            )}
             <button onClick={() => onExploreProjects()} className="hover:text-brand transition-colors cursor-pointer">Find Work</button>
             <button onClick={() => scrollToSection('how-it-works')} className="hover:text-brand transition-colors cursor-pointer">How It Works</button>
             <button onClick={() => scrollToSection('success-stories')} className="hover:text-brand transition-colors cursor-pointer">Success Stories</button>

@@ -10,6 +10,19 @@ import Profile from './components/Profile';
 import Settings from './components/Settings';
 import LoginModal from './components/LoginModal';
 
+// Company Landing Page imports
+import CompanyNavbar from './components/Navbar';
+import CompanyHero from './components/Hero';
+import TrustedCompanies from './components/TrustedCompanies';
+import WhyHireTeens from './components/WhyHireTeens';
+import CompanyHowItWorks from './components/HowItWorks';
+import CompanySuccessStories from './components/SuccessStories';
+import CompanyStats from './components/Stats';
+import Pricing from './components/Pricing';
+import CTA from './components/CTA';
+import CompanyFooter from './components/Footer';
+import BookDemoModal from './components/BookDemoModal';
+
 import { 
   mockProjects,
   initialApplications, 
@@ -26,10 +39,12 @@ import type {
 } from './data/mockData';
 
 function App() {
-  // Authentication & Navigation
+  // Authentication & Navigation Mode
+  const [viewMode, setViewMode] = useState<'company' | 'teen'>('teen'); // defaults to teen portal first
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentPage, setCurrentPage] = useState('landing'); // 'landing' | 'browse' | 'details' | 'applications' | 'messages' | 'earnings' | 'profile' | 'settings'
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
   
   // Data States
   const [applications, setApplications] = useState<Application[]>(initialApplications);
@@ -57,6 +72,23 @@ function App() {
       root.classList.remove('dark');
     }
   }, [theme]);
+
+  // Smooth scroll helper shared across Company landing page components
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 80;
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Auth callbacks
   const handleLoginSuccess = () => {
@@ -269,6 +301,52 @@ function App() {
     }
   };
 
+  // View mode switcher: Company Portal vs Teen Portal
+  if (viewMode === 'company') {
+    return (
+      <div className="min-h-screen bg-white overflow-x-hidden text-slate-800 transition-colors">
+        <CompanyNavbar
+          onLogin={() => setIsLoginModalOpen(true)}
+          onHireTeens={() => scrollToSection('cta')}
+          scrollToSection={scrollToSection}
+          scrollToTop={scrollToTop}
+          onSwitchToTeen={() => setViewMode('teen')}
+        />
+        <main>
+          <CompanyHero
+            onHireTeens={() => scrollToSection('cta')}
+            onBookDemo={() => setIsDemoOpen(true)}
+          />
+          <TrustedCompanies />
+          <WhyHireTeens />
+          <CompanyHowItWorks />
+          <CompanySuccessStories />
+          <CompanyStats />
+          <Pricing />
+          <CTA
+            onHireTeens={() => scrollToSection('cta')}
+            onBookDemo={() => setIsDemoOpen(true)}
+          />
+        </main>
+        <CompanyFooter
+          scrollToSection={scrollToSection}
+          scrollToTop={scrollToTop}
+        />
+
+        {/* Modals */}
+        <LoginModal 
+          isOpen={isLoginModalOpen} 
+          onClose={() => setIsLoginModalOpen(false)}
+          onSuccess={handleLoginSuccess}
+        />
+        <BookDemoModal 
+          isOpen={isDemoOpen} 
+          onClose={() => setIsDemoOpen(false)} 
+        />
+      </div>
+    );
+  }
+
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'dark bg-slate-950' : 'bg-white'}`}>
       {!isLoggedIn ? (
@@ -277,6 +355,7 @@ function App() {
             onLogin={() => setIsLoginModalOpen(true)}
             onSignUp={handleSignUpSuccess} // Direct signup to profile setup
             onExploreProjects={handleExploreProjects}
+            onSwitchToCompany={() => setViewMode('company')}
           />
           <LoginModal 
             isOpen={isLoginModalOpen} 

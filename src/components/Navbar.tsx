@@ -7,9 +7,10 @@ interface NavbarProps {
   onHireTeens: () => void;
   scrollToSection: (id: string) => void;
   scrollToTop: () => void;
+  onSwitchToTeen: () => void;
 }
 
-export default function Navbar({ onLogin, onHireTeens, scrollToSection, scrollToTop }: NavbarProps) {
+export default function Navbar({ onLogin, onHireTeens, scrollToSection, scrollToTop, onSwitchToTeen }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showResources, setShowResources] = useState(false);
@@ -92,6 +93,12 @@ export default function Navbar({ onLogin, onHireTeens, scrollToSection, scrollTo
         {/* Desktop Action Buttons */}
         <div className="hidden md:flex items-center gap-4">
           <button
+            onClick={onSwitchToTeen}
+            className="px-4.5 py-2 border border-brand/35 text-brand hover:bg-brand/5 rounded-full font-semibold text-sm transition-all duration-300 cursor-pointer"
+          >
+            Teen Portal
+          </button>
+          <button
             onClick={onLogin}
             className="px-5 py-2 text-slate-700 hover:text-brand font-semibold text-sm transition-colors cursor-pointer"
           >
@@ -139,6 +146,12 @@ export default function Navbar({ onLogin, onHireTeens, scrollToSection, scrollTo
               ))}
               
               <div className="border-t border-slate-100 my-2 pt-4 flex flex-col gap-4">
+                <button
+                  onClick={() => { setIsOpen(false); onSwitchToTeen(); }}
+                  className="w-full text-center px-4 py-2.5 bg-brand-light text-brand hover:bg-brand hover:text-white font-semibold text-sm transition-all rounded-full cursor-pointer"
+                >
+                  Teen Portal
+                </button>
                 <button
                   onClick={() => { setIsOpen(false); onLogin(); }}
                   className="w-full text-center px-4 py-2.5 text-slate-700 hover:text-brand font-semibold text-sm transition-colors border border-slate-200 rounded-full cursor-pointer"
